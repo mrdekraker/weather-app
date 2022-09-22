@@ -1,0 +1,8 @@
+.title {
+  border: 1px solid red;
+}
+
+.search,
+.info {
+  border: 1px solid blue;
+}

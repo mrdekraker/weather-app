@@ -6,6 +6,7 @@
 }
 
 body {
+  /* width: 100vw; */
   background: #ee0979; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to left,
@@ -19,20 +20,21 @@ body {
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-.container {
+.container-fluid {
   background: rgba(0, 0, 0, 0.4);
-  /* margin: 3rem; */
-  height: 90vh;
   border-radius: 12px;
+  margin-top: 40px;
+  padding-bottom: 30px;
 }
 
 /* ELEMENT STYLES */
 
+/* ASIDE -- CITY SEARCH */
 header h1 {
   border-bottom: 1px solid gray;
   font-family: Poppins;
   color: white;
-  font-size: 3em;
+  font-size: 5em;
   font-weight: bold;
 }
 
@@ -47,11 +49,12 @@ header h1:hover {
 
 ul {
   /* background: black; */
-  margin: 0 20px;
+  /* margin: 0 20px; */
   padding: 20px 0;
   list-style: none;
   border-top: 1px solid gray;
-  font-size: 1.5em;
+  border-bottom: 1px solid gray;
+  font-size: 1.2em;
 }
 
 /* ul li button {
@@ -71,3 +74,16 @@ ul {
   background: green;
   border: green;
 } */
+
+/* MAIN -- CITY INFO/FORCAST */
+.weatherDate {
+  /* margin-left: 1px; */
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  color: white;
+  list-style: none;
+}
+
+.hide {
+  display: none;
+}

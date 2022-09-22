@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bootstrap 5.2 Layout</title>
+    <!-- BOOTSTRAP -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+      crossorigin="anonymous" />
+    <!-- MY CSS -->
+    <link rel="stylesheet" href="./layout.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row title">
+        <h1 class="text-center">Weather Dashboard</h1>
+      </div>
+      <div class="row">
+        <div class="col search">Weather search</div>
+        <div class="col info">Weather Info</div>
+      </div>
+    </div>
+    <!-- BOOTSTRAP -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+      crossorigin="anonymous"></script>
+  </body>
+</html>
+
+<div class="container my-4">
+  <header class="row">
+    <h1 class="text-center px-5">Weather Dashboard</h1>
+  </header>
+  <aside class="card col-12 col-lg-4">
+    <form id="city-form">
+      <!-- CARD INFO -->
+      <div class="card-body">
+        <h3 class="card-title">Search For A City</h3>
+        <div class="row">
+          <div class="input-group">
+            <input
+              type="text"
+              id="city"
+              class="form-control citySearch"
+              placeholder="Search by City"
+              aria-label="Search by City"
+              aria-describedby="button-addon2" />
+            <button
+              class="btn btn-outline-secondary searchBtn"
+              type="button"
+              id="button-addon2">
+              Button
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- CARD RECENT SEARCH ADDON -->
+      <!-- <ul>
+            <li><button class="col-6">Houston</button></li>
+            <li><button class="col-6">Austin</button></li>
+            <li><button class="col-6">London</button></li>
+            <li><button class="col-6">Toronto</button></li>
+            <li><button>hello 5</button></li>
+            <li><button>hello 6</button></li>
+            <li><button>hello 7</button></li>
+            <li><button>hello 8</button></li>
+          </ul> -->
+    </form>
+  </aside>
+  <main class="weatherInfo">
+    <div class="card col-12 col-lg-8">Hello</div>
+  </main>
+</div>
