@@ -38,42 +38,28 @@ header h1 {
   font-weight: bold;
 }
 
-header h1:hover {
-  color: aquamarine;
-}
-
 .card {
   color: white;
   background: rgba(0, 0, 0, 0.4);
 }
 
-ul {
+.search-list {
   /* background: black; */
   /* margin: 0 20px; */
-  padding: 20px 0;
+  padding: 20px 10px;
   list-style: none;
   border-top: 1px solid gray;
   border-bottom: 1px solid gray;
-  font-size: 1.2em;
+  font-size: 1.4em;
 }
 
-/* ul li button {
-  width: 100%;
-} */
-
-.btn:hover {
-  background: black;
+ul li button {
+  border: 1px solid black;
+  margin: 1px 0;
+  width: 50%;
+  background: rgba(210, 17, 17, 0.4);
+  color: white;
 }
-
-/* .btn-outline-secondary {
-  background: aquamarine;
-  border: aquamarine;
-}
-
-.btn-outline-secondary:hover {
-  background: green;
-  border: green;
-} */
 
 /* MAIN -- CITY INFO/FORCAST */
 .weatherDate {
@@ -82,6 +68,38 @@ ul {
   border-radius: 12px;
   color: white;
   list-style: none;
+}
+
+.currentWeather {
+  margin-left: 1px;
+  border-radius: 12px;
+  color: white;
+  list-style: none;
+  font-size: 1.4em;
+}
+
+.forecastTitle {
+  /* border: 1px solid gray; */
+  font-size: 2.5em;
+  font-weight: bold;
+  color: white;
+}
+
+span.severe {
+  padding: 3px;
+  background-color: red;
+  color: white;
+}
+
+span.moderate {
+  padding: 3px;
+  background-color: yellow;
+}
+
+span.favorable {
+  padding: 3px;
+  background-color: green;
+  color: white;
 }
 
 .hide {
