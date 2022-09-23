@@ -1,57 +1,57 @@
-// console.log(dayjs());
 const cities = [];
 
-const date = moment(new Date());
+const cityInput = $(`#city`);
+const citySubmit = $(`#city-form`);
+const infoContainer = $(`.infoContainer`);
+const lastSearchEl = $(`#lastSearchBtns`);
+
 const weatherList = $(`#weather-list`);
 const weatherContainer = $(`.currentWeather`);
 const cityCurrentDate = $(`#cityCurrentDate`);
-const citySubmit = $(`#city-form`);
-const cityInput = $(`#city`);
+const date = moment(new Date());
+
 const forecastContainer = $(`#future-forecast`);
 const forecastTitle = $(`.forecastTitle`);
-const infoContainer = $(`.infoContainer`);
-const searchList = $(`.search-list`);
-const recentSearchBtn = $(`button`);
 
 // DISPLAY 5 DAY FORCAST
 const display5Day = function (weather) {
   $(forecastContainer).text(``);
-  $(forecastTitle).text(`5 Day Forecast:`);
+  $(forecastTitle).text(`5-Day Forecast:`);
 
   const forecast = weather.list;
-  console.log(forecast);
-  for (let i = 5; i < forecast.length; i += 1) {
+  for (let i = 5; i < forecast.length; i += 8) {
     const dailyForecast = forecast[i];
+    const forecastCard = document.createElement(`div`);
+    $(forecastCard).addClass(`card mx-2`);
 
-    const forecastCard = $(`#future-forecast`);
-    $(forecastCard).add(`card`);
+    console.log(dailyForecast);
 
-    // APPEND DATE ELEMENT
-    const forecastDate = $(`h4`);
-    // $(forecastDate).text(date.add(1, `days`).format(`MMM D, YYYY`));
-    forecastDate.textContent = moment.unix(dailyForecast.dt).format('MMM D, YYYY');
+    // CREATE DATE ELEMENT
+    const futureDate = moment.unix(dailyForecast.dt).format(`MMM D, YYYY`);
+    const forecastDate = document.createElement(`h4`);
+    $(forecastDate).text(futureDate);
     forecastDate.classList = `card-header text-center`;
     $(forecastCard).append(forecastDate);
 
-    // CREATE IMG ELEMENT
+    // CREATE WEATHER ICON
     const weatherIcon = document.createElement(`img`);
     weatherIcon.classList = `card-body text-center`;
-    weatherIcon.setAttribute(`src`, `https://openweathermap.org/img/wn/${dailyForecast.weather[0].icon}@2x.png`);
+    weatherIcon.setAttribute('src', `https://openweathermap.org/img/wn/${dailyForecast.weather[0].icon}@2x.png`);
+    $(forecastCard).append(weatherIcon);
 
-    // CREATE TEMP SPAN
-    const tempSpan = $(`<span></span>`);
-    $(tempSpan).addClass(`card-body text-center`);
-    // $(tempSpan).text(`${dailyForecast.main.temp} °F`);
-    $(tempSpan).text(`OINGA BOINGA`);
-    $(forecastCard).append(tempSpan);
+    // CREATE TEMP ELEMENT
+    const forecastTemp = document.createElement(`span`);
+    forecastTemp.classList = `card-body text-center`;
+    forecastTemp.textContent = `Temp: ${dailyForecast.main.temp} °F`;
+    $(forecastCard).append(forecastTemp);
 
-    // CREATE HUMIDITY SPAN
-    const humidSpan = $(`<span></span>`);
-    $(humidSpan).addClass(`card-body text-center`);
-    $(humidSpan).text(`${dailyForecast.main.humidity} °F`);
-    $(forecastCard).append(humidSpan);
+    // CREATE HUMIDITY ELEMENT
+    const forecastHumidity = document.createElement(`span`);
+    forecastHumidity.classList = `card-body text-center`;
+    forecastHumidity.textContent = `Humidity: ${dailyForecast.main.humidity}%`;
+    $(forecastCard).append(forecastHumidity);
 
-    // APPEND EVERYTHING TO CONTAINER
+    // APPEND CARD TO CONTAINER
     $(forecastContainer).append(forecastCard);
   }
 };
@@ -91,7 +91,7 @@ const displayWeather = function (weather, citySearch) {
 
   // Create Li to hold humidity data
   const humidLi = $(`<li></li>`);
-  $(humidLi).text(`Humidity: ${weather.main.humidity} %`);
+  $(humidLi).text(`Humidity: ${weather.main.humidity}%`);
   $(weatherList).append(humidLi);
 
   // Create Li to hold wind Data
@@ -103,7 +103,7 @@ const displayWeather = function (weather, citySearch) {
 // RETRIEVE THE FORECAST
 const getForecast = function (city) {
   const APIKey = `44d25aa6fc100aefcb5aaa543a561628`;
-  const APIUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
+  const APIUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${APIKey}`;
 
   fetch(APIUrl).then((response) => {
     response.json().then((data) => {
@@ -112,9 +112,27 @@ const getForecast = function (city) {
   });
 };
 
+// LAST SEARCH HANDLER
+const lastSearchHandler = function (event) {
+  const city = event.target.getAttribute(`data-city`);
+  if (city) {
+    getForecast(city);
+    get5Day(city);
+  }
+};
+
 // LIST PAST SEARCHES
 const recentSearchList = function (lastSearch) {
-  console.log(lastSearch);
+  const liEl = document.createElement(`li`);
+  const lastSearchEl = document.createElement(`button`);
+  $(lastSearchEl).text(lastSearch);
+  lastSearchEl.setAttribute(`data-city`, lastSearch);
+  lastSearchEl.setAttribute(`type`, `submit`);
+
+  cities.push(lastSearch);
+
+  liEl.appendChild(lastSearchEl);
+  $(`.search-list`).append(liEl);
 };
 
 // SAVE THE SEARCHES
@@ -122,15 +140,17 @@ const saveSearch = function () {
   localStorage.setItem(`cities`, JSON.stringify(cities));
 };
 
-// FORM HANDLER
-const formSubmitHandler = function (e) {
-  e.preventDefault();
+// FORM SUBMIT HANDLER
+const formSubmitHandler = (event) => {
+  event.preventDefault();
   const city = cityInput.val().trim();
-  console.log(city);
+  $(`.infoContainer`).removeClass(`hide`);
+  $(`.search-list`).removeClass(`hide`);
 
   if (city) {
     getForecast(city);
     get5Day(city);
+    // cities.unshift({ city });
     cityInput.val(``);
     $(infoContainer).removeClass(`hide`);
   } else {
@@ -138,7 +158,8 @@ const formSubmitHandler = function (e) {
   }
 
   saveSearch();
-  recentSearchList();
+  recentSearchList(city);
 };
 
 $(citySubmit).submit(formSubmitHandler);
+$(lastSearchEl).click(lastSearchHandler);

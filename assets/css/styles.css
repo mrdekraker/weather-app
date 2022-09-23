@@ -61,6 +61,10 @@ ul li button {
   color: white;
 }
 
+ul li button:hover {
+  background: rgba(210, 17, 17, 0.8);
+}
+
 /* MAIN -- CITY INFO/FORCAST */
 .weatherDate {
   /* margin-left: 1px; */
@@ -79,7 +83,9 @@ ul li button {
 }
 
 .forecastTitle {
-  /* border: 1px solid gray; */
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+  width: 30%;
   font-size: 2.5em;
   font-weight: bold;
   color: white;

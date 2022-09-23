@@ -53,28 +53,20 @@
               </div>
             </form>
             <!-- APPEND TO search-card -->
-            <ul class="search-list"></ul>
+            <ul class="search-list hide" id="lastSearchBtns"></ul>
           </aside>
         </div>
         <!-- MAIN {toggle Hide}-->
         <div class="col-12 col-xl-8 px-5" id="mainInfo">
-          <main class="row infoContainer" id="forcast">
-            <div class="row weatherDate col-12 mx-1">
-              <h1 id="cityCurrentDate">Weather Info</h1>
+          <main class="row infoContainer hide" id="forcast">
+            <div class="row weatherDate col-12 mx-1 py-3">
+              <h1 id="cityCurrentDate">3/31/21</h1>
               <ul class="currentWeather" id="weather-list"></ul>
-              <h3 class="forecastTitle">5-Day Forecast:</h3>
+              <h3 class="forecastTitle">3/25/90</h3>
               <!-- Container -->
-              <div class="d-flex" id="future-forcast">
-                <div class="card">
-                  <h4 class="card-header text-center">Tomorrow's Date</h4>
-                  <img
-                    src=""
-                    alt="weather icon"
-                    class="card-body text-center card-image" />
-                  <span class="card-body text-center">Farenheit Info</span>
-                  <span class="card-body text-center">Humidity % info</span>
-                </div>
-              </div>
+              <div
+                class="d-flex justify-content-between"
+                id="future-forecast"></div>
             </div>
           </main>
         </div>
