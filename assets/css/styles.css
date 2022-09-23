@@ -1,0 +1,107 @@
+/* DOCUMENT/BODY STYLING */
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "Lora", "Poppins", serif, sans-serif;
+}
+
+body {
+  /* width: 100vw; */
+  background: #ee0979; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to left,
+    #ff6a00,
+    #ee0979
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to left,
+    #ff6a00,
+    #ee0979
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.container-fluid {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  margin-top: 40px;
+  padding-bottom: 30px;
+}
+
+/* ELEMENT STYLES */
+
+/* ASIDE -- CITY SEARCH */
+header h1 {
+  border-bottom: 1px solid gray;
+  font-family: Poppins;
+  color: white;
+  font-size: 5em;
+  font-weight: bold;
+}
+
+.card {
+  color: white;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.search-list {
+  /* background: black; */
+  /* margin: 0 20px; */
+  padding: 20px 10px;
+  list-style: none;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+  font-size: 1.4em;
+}
+
+ul li button {
+  border: 1px solid black;
+  margin: 1px 0;
+  width: 50%;
+  background: rgba(210, 17, 17, 0.4);
+  color: white;
+}
+
+/* MAIN -- CITY INFO/FORCAST */
+.weatherDate {
+  /* margin-left: 1px; */
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  color: white;
+  list-style: none;
+}
+
+.currentWeather {
+  margin-left: 1px;
+  border-radius: 12px;
+  color: white;
+  list-style: none;
+  font-size: 1.4em;
+}
+
+.forecastTitle {
+  /* border: 1px solid gray; */
+  font-size: 2.5em;
+  font-weight: bold;
+  color: white;
+}
+
+span.severe {
+  padding: 3px;
+  background-color: red;
+  color: white;
+}
+
+span.moderate {
+  padding: 3px;
+  background-color: yellow;
+}
+
+span.favorable {
+  padding: 3px;
+  background-color: green;
+  color: white;
+}
+
+.hide {
+  display: none;
+}
