@@ -7,41 +7,53 @@
     <link rel="stylesheet" href="./assets/css/styles.css" />
     <title>Whatever The Weather</title>
   </head>
+
   <body>
     <div class="container">
-      <div class="inner-container">
-        <header>
-          <h1>Whatever The Weather</h1>
-        </header>
+      <!-- HEADER -->
+      <header>
+        <h1>Whatever The Weather</h1>
+      </header>
 
-        <section class="search">
-          <form action="">
-            <input
-              class="inputText"
-              type="text"
-              placeholder="Search for City..." />
-            <button class="searchButton" type="submit">Search</button>
-          </form>
-        </section>
+      <div class="city-container">
+        <!-- ASIDE -->
+        <aside>
+          <section class="search" id="citySearch">
+            <form id="citySubmit">
+              <input
+                id="cityName"
+                type="text"
+                placeholder="Search for City..."
+                aria-label="Search for City..."
+                aria-describedby="search-button" />
+              <button class="searchButton" id="search-button" type="submit">
+                Search
+              </button>
+            </form>
 
-        <section class="cityInfo">
-          <div class="cityName">
-            <h2>City Name</h2>
-          </div>
-          <div class="cityTemp">
-            <h3>Temperature</h3>
-          </div>
-          <div class="cityHumidity">
-            <h3>Humidity</h3>
-          </div>
-          <div class="cityWind">
-            <h3>Wind Speed</h3>
-          </div>
-          <div class="cityUV">
-            <h3>UV Index</h3>
-          </div>
-        </section>
+            <!-- APPEND TO SECTION -->
+            <ul class="search-list hide"></ul>
+          </section>
+        </aside>
+
+        <!-- MAIN {TOGGLE HIDE} -->
+        <main class="hide">
+          <h2 class="city-name date">City Name Here & Current Date</h2>
+          <aside class="cityDescription">
+            <h3 class="cityForecast">5 Day Forecast</h3>
+            <div class="cards">
+              <div class="card">
+                <p class="card-date">Date</p>
+                <p class="card-icon">icon</p>
+                <p class="card-temp">Temp:</p>
+                <p class="card-humidity">Humidity:</p>
+              </div>
+            </div>
+          </aside>
+        </main>
       </div>
     </div>
+
+    <script src="./assets/js/script.js"></script>
   </body>
 </html>
