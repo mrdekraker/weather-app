@@ -19,14 +19,14 @@
         <!-- ASIDE -->
         <aside>
           <section class="search" id="citySearch">
-            <form id="citySubmit">
+            <form>
               <input
-                id="cityName"
+                class="cityInput"
                 type="text"
                 placeholder="Search for City..."
                 aria-label="Search for City..."
                 aria-describedby="search-button" />
-              <button class="searchButton" id="search-button" type="submit">
+              <button class="searchButton" id="citySubmit" type="submit">
                 Search
               </button>
             </form>
@@ -37,16 +37,23 @@
         </aside>
 
         <!-- MAIN {TOGGLE HIDE} -->
-        <main class="hide">
-          <h2 class="city-name date">City Name Here & Current Date</h2>
+        <main class="main hide">
+          <h2 class="cityName date">City Name Here & Current Date</h2>
           <aside class="cityDescription">
-            <h3 class="cityForecast">5 Day Forecast</h3>
+            <div class="currentInfo">
+              <p class="cityTemp">Temperature:</p>
+              <p class="cityHumidity">Humidity:</p>
+              <p class="cityWindSpeed">Wind Speed:</p>
+            </div>
+
+            <h3 class="forecast">5 Day Forecast:</h3>
             <div class="cards">
               <div class="card">
-                <p class="card-date">Date</p>
-                <p class="card-icon">icon</p>
-                <p class="card-temp">Temp:</p>
-                <p class="card-humidity">Humidity:</p>
+                <p class="cardDate">Date</p>
+                <p class="cardIcon">icon</p>
+                <p class="cardTempMax">Temp:</p>
+                <p class="cardTempMin">Temp:</p>
+                <p class="cardHumidity">Humidity:</p>
               </div>
             </div>
           </aside>

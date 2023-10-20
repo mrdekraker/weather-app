@@ -1,120 +1,123 @@
 // Author: Mark DeKraker
-const cities = [];
 
-const city = document.querySelector(`#cityName`);
+const cityInput = document.querySelector(`.cityInput`);
 const citySubmit = document.querySelector(`#citySubmit`);
+const main = document.querySelector(`.main`);
 
 const APIKEY = `44d25aa6fc100aefcb5aaa543a561628`;
 
-// listen for form submit event
-citySubmit.addEventListener("click", (e) => {
-  e.preventDefault(); // prevent form from submitting
-  const citySearch = city.value.trim();
-  console.log(citySearch);
-    getGeocode(citySearch).then((data) => {
-      const lat = data[0].lat;
-      const lon = data[0].lon;
-      console.log(`Latitude: ${lat}, Longitude: ${lon}`);
+citySubmit.addEventListener(`click`, (e) => {
+  e.preventDefault();
 
-      // fetch weather data
-      getWeather(lat, lon).then((data) => {
-        console.log(`City Data: ${JSON.stringify(data)}`);
-        displayWeather(data, citySearch);
-      });
-
+  // GRAB CITY NAME
+  const citySearch = cityInput.value.trim();
+  
+  // GET GEOCODE
+  getGeocode(citySearch).then((data) => {
+    const lat = data[0].lat;
+    const lon = data[0].lon;
+    console.log(`Latitude: ${lat}, Longitude: ${lon}`);
+  
+    // GET WEATHER
+    getWeather(lat, lon).then((data) => {
       // DISPLAY WEATHER
       displayWeather(data, citySearch);
     });
+  })
+})
   
-  // clear input fields
-  city.value = "";
-  
-  
-});
 
 // FETCH GEOCODE API
 const getGeocode = function (city) {
-  const geocodeURL = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${APIKEY}`;
+  const geocodeURL = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=6&appid=${APIKEY}`;
   return fetch(geocodeURL).then((response) => {
     return response.json();
   });
-}
+};
 
 // FETCH WEATHER API
 const getWeather = function (lat, lon) {
-  const weatherURL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKEY}&units=imperial`;
-  http: return fetch(weatherURL).then((response) => {
+  const weatherURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKEY}&units=imperial`;
+  return fetch(weatherURL).then((response) => {
     return response.json();
   });
-}
-
-// DISPLAY WEATHER
-function displayWeather(data, citySearch) {
-  const cityName = document.querySelector(`.city-name`);
-  const temp = document.querySelector(`.temp`);
-  const humidity = document.querySelector(`.humidity`);
-
-  cityName.textContent = citySearch + ` - ${currentDate()}`;
-  
-  // APPEND TO SEARCH LIST
-  searchAppend(data, citySearch);
-}
-
-// CURRENT DATE
-const currentDate = () => {
-  const date = new Date();
-  const options = {
-    weekday: `short`,
-    month: `short`,
-    day: `numeric`,
-    year: `numeric`,
-  };
-  return date.toLocaleDateString(`en-US`, options);
 };
+// const getWeather = function (lat, lon) {
+//   const weatherURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKEY}&units=imperial`;
+//   return fetch(weatherURL).then((response) => {
+//     return response.json();
+//   }).then((data) => {
+//     console.log(data.list[0].weather[0].icon);
+//     return data;
+//   });
+// };
 
-const searchAppend = function (data, citySearch) {
-  const searchList = document.querySelector(`.search-list`);
-  const searchItems = searchList.querySelectorAll(`li`);
-  let buttonExists = false;
-
-  // Check if a button with the same name already exists
-  searchItems.forEach((item) => {
-    const button = item.querySelector(`button`);
-    if (button && button.textContent === citySearch) {
-      buttonExists = true;
-    }
-  });
-
-  // Add a new button if it doesn't already exist
-  if (!buttonExists) {
-    const searchItem = document.createElement(`li`);
-    const searchButton = document.createElement(`button`);
-    searchItem.classList = `list-group-item`;
-    searchButton.classList = `btn btn-link`;
-    searchButton.textContent = citySearch;
-    searchItem.appendChild(searchButton);
-    searchList.appendChild(searchItem);
-  }
+// FETCH ICONS
+const getIcon = function (iconCode) {
+  const iconURL = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 }
 
-// SEARCH LIST EVENT LISTENER
-const searchList = document.querySelector(`.search-list`);
+const getTemps = function (data) {
+  const dailyTemps = [];
 
-searchList.addEventListener(`click`, function (event) {
-  if (event.target.matches(`button`)) {
-    const citySearch = event.target.textContent;
-    getGeocode(citySearch).then((data) => {
-      const lat = data[0].lat;
-      const lon = data[0].lon;
+  for (let i = 5; i < data.list.length; i += 8) {
+    const dailyForecast = data.list[i];
+    const maxTemp = dailyForecast.main.temp_max;
+    const minTemp = dailyForecast.main.temp_min;
 
-      // fetch weather data
-      getWeather(lat, lon).then((data) => {
-        console.log(`City Data: ${JSON.stringify(data)}`);
-        displayWeather(data, citySearch);
-      });
-
-      // DISPLAY WEATHER
-      displayWeather(data, citySearch);
+    dailyTemps.push({
+      current: dailyForecast.main.temp,
+      max: maxTemp,
+      min: minTemp,
     });
   }
-});
+
+  return dailyTemps;
+};
+
+
+// Display Weather Cards
+const displayWeather = function (data, citySearch) {
+  const date = new Date();
+  const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+  const today = date.toLocaleDateString('en-US', options);
+
+  // Remove the 'hide' class to show the weather information
+  main.classList.remove('hide');
+
+  const cityName = document.querySelector('.cityName');
+  const forecast = data.list;
+
+  // Display the city name and date
+  cityName.textContent = `${citySearch} - ${today}`;
+
+  // Get the daily temperatures using the getTemps function
+  const dailyTemperatures = getTemps(data);
+
+  // Display 5 weather cards
+  const cardContainer = document.querySelector('.cards');
+  cardContainer.innerHTML = '';
+
+  for (let i = 0; i < 5; i += 1) {
+    const card = document.createElement("div");
+    card.classList.add("card");
+
+    // Increment the date for each card
+    const cardDate = new Date(date);
+    cardDate.setDate(date.getDate() + i); // Increment date by i days
+    const cardOptions = {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    };
+    const cardDateFormatted = cardDate.toLocaleDateString("en-US", cardOptions);
+
+    // Fetch and display icons, temperatures, and humidity for each card
+    const iconCode = forecast[i].weather[0].icon;
+    console.log(iconCode)
+    getIcon(iconCode)
+  }
+};
+
+
