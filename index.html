@@ -1,91 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Whatever The Weather</title>
-    <!-- BOOTSTRAP -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
-      crossorigin="anonymous" />
-    <!-- GOOGLE FONTS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lora&family=Poppins:wght@400;500&display=swap"
-      rel="stylesheet" />
-    <!-- MY STYLES -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- link CSS -->
     <link rel="stylesheet" href="./assets/css/styles.css" />
+    <title>Whatever The Weather</title>
   </head>
 
   <body>
-    <div class="container-fluid">
-      <header class="row">
-        <h1 class="text-center">Weather Dashboard</h1>
+    <div class="container">
+      <!-- HEADER -->
+      <header>
+        <h1>Whatever The Weather</h1>
       </header>
-      <div class="row">
+
+      <div class="city-container">
         <!-- ASIDE -->
-        <div class="col-12 col-xl-3">
-          <aside class="card search-card">
-            <form id="city-form">
-              <!-- CARD INFO -->
-              <div class="card-body">
-                <h3 class="card-title">Search For A City</h3>
-                <div class="row">
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      id="city"
-                      class="form-control citySearch"
-                      placeholder="Search by City"
-                      aria-label="Search by City"
-                      aria-describedby="button-addon2" />
-                    <button
-                      class="btn btn-outline-secondary searchBtn"
-                      type="submit"
-                      id="button-addon2">
-                      Button
-                    </button>
-                  </div>
-                </div>
-              </div>
+        <aside>
+          <section class="search" id="citySearch">
+            <form>
+              <input
+                class="cityInput"
+                type="text"
+                placeholder="Search for City..."
+                aria-label="Search for City..."
+                aria-describedby="search-button" />
+              <button class="searchButton" id="citySubmit" type="submit">
+                Search
+              </button>
             </form>
-            <!-- APPEND TO search-card -->
-            <ul class="search-list hide" id="lastSearchBtns"></ul>
-          </aside>
-        </div>
-        <!-- MAIN {toggle Hide}-->
-        <div class="col-12 col-xl-8 px-5" id="mainInfo">
-          <main class="row infoContainer hide" id="forcast">
-            <div class="row weatherDate col-12 mx-1 py-3">
-              <h1 id="cityCurrentDate">3/31/21</h1>
-              <ul class="currentWeather" id="weather-list"></ul>
-              <h3 class="forecastTitle">3/25/90</h3>
-              <!-- Container -->
-              <div
-                class="d-flex justify-content-between"
-                id="future-forecast"></div>
+
+            <!-- APPEND TO SECTION -->
+            <ul class="search-list hide"></ul>
+          </section>
+        </aside>
+
+        <!-- MAIN {TOGGLE HIDE} -->
+        <main class="main hide">
+          <h2 class="cityName date">City Name Here & Current Date</h2>
+          <aside class="cityDescription">
+            <div class="currentInfo">
+              <p class="cityTemp">Temperature:</p>
+              <p class="cityHumidity">Humidity:</p>
+              <p class="cityWindSpeed">Wind Speed:</p>
             </div>
-          </main>
-        </div>
+
+            <h3 class="forecast">5 Day Forecast:</h3>
+            <div class="cards">
+              <div class="card">
+                <p class="cardDate">Date</p>
+                <p class="cardIcon">icon</p>
+                <p class="cardTempMax">Temp:</p>
+                <p class="cardTempMin">Temp:</p>
+                <p class="cardHumidity">Humidity:</p>
+              </div>
+            </div>
+          </aside>
+        </main>
       </div>
     </div>
 
-    <!-- JQUERY -->
-    <script
-      src="https://code.jquery.com/jquery-3.6.1.min.js"
-      integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-      crossorigin="anonymous"></script>
-    <!-- BOOTSTRAP -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
-      crossorigin="anonymous"></script>
-    <!-- MOMENT JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
-    <!-- MY JS -->
     <script src="./assets/js/script.js"></script>
   </body>
 </html>

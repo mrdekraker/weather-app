@@ -1,165 +1,197 @@
-const cities = [];
+// Author: Mark DeKraker
 
-const cityInput = $(`#city`);
-const citySubmit = $(`#city-form`);
-const infoContainer = $(`.infoContainer`);
-const lastSearchEl = $(`#lastSearchBtns`);
+const cityInput = document.querySelector(`.cityInput`);
+const citySubmit = document.querySelector(`#citySubmit`);
+const main = document.querySelector(`.main`);
 
-const weatherList = $(`#weather-list`);
-const weatherContainer = $(`.currentWeather`);
-const cityCurrentDate = $(`#cityCurrentDate`);
-const date = moment(new Date());
+const APIKEY = `44d25aa6fc100aefcb5aaa543a561628`;
 
-const forecastContainer = $(`#future-forecast`);
-const forecastTitle = $(`.forecastTitle`);
+citySubmit.addEventListener(`click`, (e) => {
+  e.preventDefault();
 
-// DISPLAY 5 DAY FORCAST
-const display5Day = function (weather) {
-  $(forecastContainer).text(``);
-  $(forecastTitle).text(`5-Day Forecast:`);
-
-  const forecast = weather.list;
-  for (let i = 5; i < forecast.length; i += 8) {
-    const dailyForecast = forecast[i];
-    const forecastCard = document.createElement(`div`);
-    $(forecastCard).addClass(`card mx-2`);
-
-    console.log(dailyForecast);
-
-    // CREATE DATE ELEMENT
-    const futureDate = moment.unix(dailyForecast.dt).format(`MMM D, YYYY`);
-    const forecastDate = document.createElement(`h4`);
-    $(forecastDate).text(futureDate);
-    forecastDate.classList = `card-header text-center`;
-    $(forecastCard).append(forecastDate);
-
-    // CREATE WEATHER ICON
-    const weatherIcon = document.createElement(`img`);
-    weatherIcon.classList = `card-body text-center`;
-    weatherIcon.setAttribute('src', `https://openweathermap.org/img/wn/${dailyForecast.weather[0].icon}@2x.png`);
-    $(forecastCard).append(weatherIcon);
-
-    // CREATE TEMP ELEMENT
-    const forecastTemp = document.createElement(`span`);
-    forecastTemp.classList = `card-body text-center`;
-    forecastTemp.textContent = `Temp: ${dailyForecast.main.temp} °F`;
-    $(forecastCard).append(forecastTemp);
-
-    // CREATE HUMIDITY ELEMENT
-    const forecastHumidity = document.createElement(`span`);
-    forecastHumidity.classList = `card-body text-center`;
-    forecastHumidity.textContent = `Humidity: ${dailyForecast.main.humidity}%`;
-    $(forecastCard).append(forecastHumidity);
-
-    // APPEND CARD TO CONTAINER
-    $(forecastContainer).append(forecastCard);
-  }
-};
-
-// RETRIEVE 5DAY
-const get5Day = function (city) {
-  const APIKey = `44d25aa6fc100aefcb5aaa543a561628`;
-  const APIurl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${APIKey}`;
-
-  fetch(APIurl).then((response) => {
-    response.json().then((data) => {
-      display5Day(data);
+  // GRAB CITY NAME
+  const citySearch = cityInput.value.trim();
+  
+  // GET GEOCODE
+  getGeocode(citySearch).then((data) => {
+    const lat = data[0].lat;
+    const lon = data[0].lon;
+  
+    // GET WEATHER
+    getWeather(lat, lon).then((data) => {
+      // DISPLAY WEATHER
+      displayWeather(data, citySearch);
     });
+  })
+})
+  
+
+// FETCH GEOCODE API
+const getGeocode = function (city) {
+  const geocodeURL = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=6&appid=${APIKEY}`;
+  return fetch(geocodeURL).then((response) => {
+    return response.json();
   });
 };
 
-// DISPLAY WEATHER ON THE PAGE
-const displayWeather = function (weather, citySearch) {
-  // clear old content
-  $(weatherContainer).text(``);
-  $(cityCurrentDate).text(citySearch);
-
-  // Add Date Element
-  const currentDateSpan = $(`<span></span>`);
-  $(currentDateSpan).text(` ${date.format('(dddd, MMM D, YYYY)')}`);
-  $(cityCurrentDate).append(currentDateSpan);
-
-  // Add Weather Icon
-  const weatherIcon = document.createElement(`img`);
-  $(weatherIcon).attr(`src`, `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`);
-  $(cityCurrentDate).append(weatherIcon);
-
-  // Create Li to append to weatherContainer to hold temperature data
-  const tempLi = $(`<li></li>`);
-  $(tempLi).text(`Temperature: ${weather.main.temp} °F`);
-  $(weatherList).append(tempLi);
-
-  // Create Li to hold humidity data
-  const humidLi = $(`<li></li>`);
-  $(humidLi).text(`Humidity: ${weather.main.humidity}%`);
-  $(weatherList).append(humidLi);
-
-  // Create Li to hold wind Data
-  const windLi = $(`<li></li>`);
-  $(windLi).text(`Wind Speed: ${weather.wind.speed} MPH`);
-  $(weatherList).append(windLi);
-};
-
-// RETRIEVE THE FORECAST
-const getForecast = function (city) {
-  const APIKey = `44d25aa6fc100aefcb5aaa543a561628`;
-  const APIUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${APIKey}`;
-
-  fetch(APIUrl).then((response) => {
-    response.json().then((data) => {
-      displayWeather(data, city);
-    });
+// FETCH WEATHER API
+const getWeather = function (lat, lon) {
+  const weatherURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKEY}&units=imperial`;
+  return fetch(weatherURL).then((response) => {
+    return response.json();
   });
 };
 
-// LAST SEARCH HANDLER
-const lastSearchHandler = function (event) {
-  const city = event.target.getAttribute(`data-city`);
-  if (city) {
-    getForecast(city);
-    get5Day(city);
-  }
-};
 
-// LIST PAST SEARCHES
-const recentSearchList = function (lastSearch) {
-  const liEl = document.createElement(`li`);
-  const lastSearchEl = document.createElement(`button`);
-  $(lastSearchEl).text(lastSearch);
-  lastSearchEl.setAttribute(`data-city`, lastSearch);
-  lastSearchEl.setAttribute(`type`, `submit`);
+const getTemps = function (data) {
+  const dailyTemps = [];
 
-  cities.push(lastSearch);
+  for (let i = 0; i < 5; i++) {
+    const dailyForecasts = data.list.slice(i * 8, (i + 1) * 8);
 
-  liEl.appendChild(lastSearchEl);
-  $(`.search-list`).append(liEl);
-};
+    // Initialize variables to keep track of min and max temperatures
+    let minTemp = dailyForecasts[0].main.temp;
+    let maxTemp = dailyForecasts[0].main.temp;
 
-// SAVE THE SEARCHES
-const saveSearch = function () {
-  localStorage.setItem(`cities`, JSON.stringify(cities));
-};
+    // Iterate over the 3-hour forecasts to find min and max temperatures
+    for (let j = 0; j < dailyForecasts.length; j++) {
+      const temp = dailyForecasts[j].main.temp;
 
-// FORM SUBMIT HANDLER
-const formSubmitHandler = (event) => {
-  event.preventDefault();
-  const city = cityInput.val().trim();
-  $(`.infoContainer`).removeClass(`hide`);
-  $(`.search-list`).removeClass(`hide`);
+      if (temp < minTemp) {
+        minTemp = temp;
+      }
 
-  if (city) {
-    getForecast(city);
-    get5Day(city);
-    // cities.unshift({ city });
-    cityInput.val(``);
-    $(infoContainer).removeClass(`hide`);
-  } else {
-    alert(`Please enter a city`);
+      if (temp > maxTemp) {
+        maxTemp = temp;
+      }
+    }
+
+    dailyTemps.push({
+      current: dailyForecasts[0].main.temp,
+      max: maxTemp,
+      min: minTemp,
+    });
   }
 
-  saveSearch();
-  recentSearchList(city);
+  return dailyTemps;
 };
 
-$(citySubmit).submit(formSubmitHandler);
-$(lastSearchEl).click(lastSearchHandler);
+// ADD BUTTONS TO SEARCH HISTORY
+const ulSearchList = document.querySelector(".search-list");
+const searchHistory = new Set();
+
+// Function to add a new button to the search list
+function addCityButton(cityName) {
+  if (!searchHistory.has(cityName)) {
+    const button = document.createElement("button");
+    button.classList.add("btn");
+    button.textContent = cityName;
+
+    // Add an event listener to each button to trigger a search
+    button.addEventListener("click", () => {
+      cityInput.value = cityName;
+      citySubmit.click();
+    });
+
+    const li = document.createElement("li");
+    li.appendChild(button);
+    ulSearchList.appendChild(li);
+
+    // Show the search list
+    ulSearchList.classList.remove("hide");
+
+    // Add the city to the search history
+    searchHistory.add(cityName);
+  }
+
+  // Clear the input field after adding the button
+  cityInput.value = "";
+}
+
+// Event listener for the search button
+citySubmit.addEventListener("click", (e) => {
+  e.preventDefault();
+  const citySearch = cityInput.value.trim();
+
+  // Check if the city name is not empty
+  if (citySearch) {
+    // Call the function to add the city button
+    addCityButton(citySearch);
+  }
+});
+
+
+
+// Display Weather Cards
+const displayWeather = function (data, citySearch) {
+  const date = new Date();
+  const options = {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  };
+  const today = date.toLocaleDateString("en-US", options);
+
+  // Remove the 'hide' class to show the weather information
+  main.classList.remove("hide");
+
+  const cityName = document.querySelector(".cityName");
+  const forecast = data.list;
+
+  // Display the city name and date
+  cityName.textContent = `${citySearch} - ${today}`;
+
+  // Get the daily temperatures using the getTemps function
+  const dailyTemperatures = getTemps(data);
+
+  // Display 5 weather cards
+  const cardContainer = document.querySelector(".cards");
+  cardContainer.innerHTML = "";
+
+  for (let i = 0; i < 5; i += 1) {
+    // Increment the date for each card
+    const cardDate = new Date(date);
+    cardDate.setDate(date.getDate() + i); // Increment date by i days
+    const cardOptions = {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    };
+    const cardDateFormatted = cardDate.toLocaleDateString("en-US", cardOptions);
+
+    // Get the weather data for the current day
+    const dayData = forecast[i];
+    const iconCode = dayData.weather[0].icon;
+    const maxTemp = dailyTemperatures[i].max;
+    const minTemp = dailyTemperatures[i].min;
+    const humidity = dayData.main.humidity;
+
+    // Create the HTML for the card using the cardTemplate
+    const cardTemplate = `
+      <div class="card">
+        <p class="cardDate">${cardDateFormatted}</p>
+        <img class="cardIcon" src="https://openweathermap.org/img/wn/${iconCode}.png" alt="Weather Icon">
+        <p class="cardTempMax">High: ${maxTemp}°F</p>
+        <p class="cardTempMin">Low: ${minTemp}°F</p>
+        <p class="cardHumidity">Humidity: ${humidity}%</p>
+      </div>
+    `;
+
+    // Append the HTML for the card to the card container
+    cardContainer.insertAdjacentHTML("beforeend", cardTemplate);
+  }
+
+  // Update the city-specific information
+  const cityTemp = document.querySelector(".cityTemp");
+  const cityHumidity = document.querySelector(".cityHumidity");
+  const cityWindSpeed = document.querySelector(".cityWindSpeed");
+
+  // Update the content of the elements with city-specific information
+  cityTemp.textContent = `Temperature: ${data.list[0].main.temp}°F`;
+  cityHumidity.textContent = `Humidity: ${data.list[0].main.humidity}%`;
+  cityWindSpeed.textContent = `Wind Speed: ${data.list[0].wind.speed} mph`;
+};
+
+
